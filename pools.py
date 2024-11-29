@@ -53,6 +53,7 @@ class PoolSizeConstraint(Constraint[str, int]):
         
         return True
 
+#pretty-prints final pool(s) in table form
 def printResult(result):
 
     template = "|{0:12}|{1:12}|{2:12}|{3:12}|" # column widths: 8, 10, 15, 7, 10
@@ -91,13 +92,15 @@ if __name__ == "__main__":
         "Xozniath",
         "Ween",
         "Brokensink",
-        "5/Grim",
+        "Grimturtle",
         "Tavares",
-        "UW 2",
-        "UT 2"
+        "Mork",
+        "Toadrex"
     ]
 
+    #Determines the size of the pools
     poolSize = 6
+
     pools: Dict[str, List[int]] = {}
     
     poolRestrictions = {
@@ -119,38 +122,34 @@ if __name__ == "__main__":
 
     csp.add_constraint(PoolSizeConstraint(players, poolSize))
 
-    #DIRECT TEAMKILLS; NECESSARY EXCLUSIONS
+    #########################
+    ### USER CONSTRAINTS: ###
+    #########################
+
+    #EXTREMELY IMPORTANT CONFLICTS TO AVOID
     csp.add_constraint(PoolExclusionConstraint("NickSF", "Stxr"))
-    csp.add_constraint(PoolExclusionConstraint("Brokensink", "UT 2"))
+    csp.add_constraint(PoolExclusionConstraint("Brokensink", "Toadrex"))
     csp.add_constraint(PoolExclusionConstraint("Walrus", "Xozniath"))
     csp.add_constraint(PoolExclusionConstraint("Xozniath", "Thorn"))
     csp.add_constraint(PoolExclusionConstraint("Aynim", "Lars"))
     csp.add_constraint(PoolExclusionConstraint("Rudulf", "Vermillion"))
     csp.add_constraint(PoolExclusionConstraint("Poutine", "Yarkster"))
-    csp.add_constraint(PoolExclusionConstraint("Tavares", "UW 2"))
+    csp.add_constraint(PoolExclusionConstraint("Tavares", "Mork"))
     csp.add_constraint(PoolExclusionConstraint("Tepig", "Ween"))
     csp.add_constraint(PoolExclusionConstraint("NerdCedric", "Kxmikaze"))
     
-    #Practice partners, important
-    csp.add_constraint(PoolExclusionConstraint("Stxr", "Lars"))
-    csp.add_constraint(PoolExclusionConstraint("Stxr", "Rudulf"))
-    csp.add_constraint(PoolExclusionConstraint("Rudulf", "Lars"))
-    
-    #Frequent opponents in shared regions, nice to avoid
+    #Frequent / recent opponents, nice to avoid
     csp.add_constraint(PoolExclusionConstraint("Poutine", "Walrus"))
     csp.add_constraint(PoolExclusionConstraint("Walrus", "Yarkster"))
     csp.add_constraint(PoolExclusionConstraint("Thorn", "Yarkster"))
     csp.add_constraint(PoolExclusionConstraint("Thorn", "Walrus"))
     csp.add_constraint(PoolExclusionConstraint("ALX R", "XIFL"))
 
-    #Recent opponents at The Graveyard and prelocal, nice to avoid
     csp.add_constraint(PoolExclusionConstraint("Brokensink", "NerdCedric"))
     
     csp.add_constraint(PoolExclusionConstraint("Thorn", "Lars"))
     csp.add_constraint(PoolExclusionConstraint("Brokensink", "NerdCedric"))
     csp.add_constraint(PoolExclusionConstraint("Brokensink", "NickSF"))
-
-    #Previous opponents at CI 1
     csp.add_constraint(PoolExclusionConstraint("XIFL", "Mkok"))
     csp.add_constraint(PoolExclusionConstraint("XIFL", "NickSF"))
     csp.add_constraint(PoolExclusionConstraint("XIFL", "Yarkster"))
@@ -158,22 +157,23 @@ if __name__ == "__main__":
     csp.add_constraint(PoolExclusionConstraint("Poutine", "NickSF"))
     csp.add_constraint(PoolExclusionConstraint("Walrus", "Mkok"))
 
-    #Purely bc of them being our friends
+    #Sets we would prefer to avoid
+    csp.add_constraint(PoolExclusionConstraint("Stxr", "Lars"))
+    csp.add_constraint(PoolExclusionConstraint("Stxr", "Rudulf"))
+    csp.add_constraint(PoolExclusionConstraint("Rudulf", "Lars"))
+
     csp.add_constraint(PoolExclusionConstraint("XIFL", "Aynim"))
     csp.add_constraint(PoolExclusionConstraint("Rudulf", "XIFL"))
     csp.add_constraint(PoolExclusionConstraint("Rudulf", "Aynim"))
 
-    #Nefariously lopsided set records
     csp.add_constraint(PoolExclusionConstraint("Thorn", "NerdCedric"))
     csp.add_constraint(PoolExclusionConstraint("Stxr", "Anaconda"))
     csp.add_constraint(PoolExclusionConstraint("ALX R", "Lars"))
     csp.add_constraint(PoolExclusionConstraint("ALX R", "Walrus"))
     csp.add_constraint(PoolExclusionConstraint("XIFL", "NickSF"))
     csp.add_constraint(PoolExclusionConstraint("ALX R", "NickSF"))
-
-    #Extensive set records, fresh faces are best
+    
     csp.add_constraint(PoolExclusionConstraint("Anaconda", "Mkok"))
-    #csp.add_constraint(PoolExclusionConstraint("Stxr", "ALX R"))
 
     #Hot sets! We WANT these to happen!
     csp.add_constraint(PoolRequirementConstraint("Poutine", "Lars"))
